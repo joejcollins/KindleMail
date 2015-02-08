@@ -8,7 +8,7 @@ application: lieutenant-green
 version: 1
 runtime: python27
 api_version: 1
-threadsafe: yes
+threadsafe: true
 
 # Handlers define how to route requests to your application.
 handlers:
