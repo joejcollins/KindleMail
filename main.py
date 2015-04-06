@@ -12,7 +12,6 @@ def hello():
     """Return a friendly HTTP greeting."""
     return 'Hello Worm'
 
-
 @app.errorhandler(404)
 def page_not_found(e):
     """Return a custom 404 error."""
