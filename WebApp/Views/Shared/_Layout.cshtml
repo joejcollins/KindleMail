@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mail</title>
     @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,6 +34,14 @@
             <p>&copy; @DateTime.Now.Year - Lieutenant Green</p>
         </footer>
     </div>
+    <script>
+        alert("testing");
+        if (Modernizr.localstorage) {
+            alert("local");
+        } else {
+            alert("no local");
+        }
+    </script>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
