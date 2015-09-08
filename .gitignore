@@ -1,6 +1,7 @@
 #################
 ## Application
 #################
+secret.txt
 _*.cmd
 _*.ps1
 *.sublime-workspace
