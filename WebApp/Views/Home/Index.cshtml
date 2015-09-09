@@ -16,7 +16,7 @@
     <tbody>
         @foreach (var messageSummary in Model.MessageSummaries)
         {
-        <tr>
+        <tr class="@(messageSummary.Read ? "seen": "not-seen" )"> 
             <td>
                 <div class="container">
                     <div class="content">@messageSummary.From</div>

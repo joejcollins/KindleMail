@@ -4,8 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MailKit;
-using MailKit.Net.Imap;
+using ImapX;
+using ImapX.Enums;
 using WebApp.Models;
 using MessageSummary = WebApp.Models.MessageSummary;
 
@@ -20,33 +20,31 @@ namespace WebApp.Controllers
             {
                 client.Connect("imap.gmail.com", 993, true);
 
-                // Note: since we don't have an OAuth2 token, disable
-                // the XOAUTH2 authentication mechanism.
-                // client.AuthenticationMechanisms.Remove("XOAUTH2");
                 var email = ConfigurationManager.AppSettings["EMAIL"];
                 var password = ConfigurationManager.AppSettings["PASSWORD"];
-                client.Authenticate(email, password);
+                client.Login(email, password);
+                client.Behavior.MessageFetchMode = MessageFetchMode.Tiny;
+                client.Behavior.AutoPopulateFolderMessages = true; 
 
                 // The Inbox folder is always available on all IMAP servers...
-                var inbox = client.Inbox;
-                inbox.Open(FolderAccess.ReadOnly);
-
-                viewModel.Total = inbox.Count;
+                var inbox = client.Folders.Inbox;
+                viewModel.Total = inbox.Messages.Count();
 
                 var messageSummaries = new List<MessageSummary>();
-                for (var i = 0; i < inbox.Count; i++)
+                for (var i = 0; i < viewModel.Total; i++)
                 {
-                    var message = inbox.GetMessage(i);
+                    var message = inbox.Messages[i];
                     var messageSummary = new Models.MessageSummary()
                     {
                         Title = message.Subject,
-                        From = message.From[0].Name
+                        From = message.From.DisplayName,
+                        Read = message.Seen
                     };
                     messageSummaries.Add(messageSummary);
                 }
                 messageSummaries.Reverse(); // Most recent first.
                 viewModel.MessageSummaries = messageSummaries;
-                client.Disconnect(true);
+                client.Disconnect();
             }
 
             return View(viewModel);
