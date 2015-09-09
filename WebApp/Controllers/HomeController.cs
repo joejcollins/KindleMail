@@ -14,7 +14,7 @@ namespace WebApp.Controllers
     {
         public ActionResult Index()
         {
-            var viewModel = new Message();
+            var viewModel = new MessageListSummary();
             using (var client = new ImapClient())
             {
                 client.Connect("imap.gmail.com", 993, true);
@@ -23,15 +23,15 @@ namespace WebApp.Controllers
                 // the XOAUTH2 authentication mechanism.
                 // client.AuthenticationMechanisms.Remove("XOAUTH2");
                 //var password = Environment.GetEnvironmentVariable("PASSWORD");
+                var email = ConfigurationManager.AppSettings["EMAIL"];
                 var password = ConfigurationManager.AppSettings["PASSWORD"];
-
-              //  client.Authenticate("joejcollins@gmail.com", password);
+                client.Authenticate(email, password);
 
                 // The Inbox folder is always available on all IMAP servers...
-              //  var inbox = client.Inbox;
-               // inbox.Open(FolderAccess.ReadOnly);
+                var inbox = client.Inbox;
+                inbox.Open(FolderAccess.ReadOnly);
 
-                viewModel.Title = "shit";
+                viewModel.Total = inbox.Count;
 
                 //Console.WriteLine("Total messages: {0}", inbox.Count);
                 //Console.WriteLine("Recent messages: {0}", inbox.Recent);
