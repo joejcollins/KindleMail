@@ -31,7 +31,7 @@ namespace WebApp.Controllers
               //  var inbox = client.Inbox;
                // inbox.Open(FolderAccess.ReadOnly);
 
-                viewModel.Title = password;
+                viewModel.Title = "shit";
 
                 //Console.WriteLine("Total messages: {0}", inbox.Count);
                 //Console.WriteLine("Recent messages: {0}", inbox.Recent);
