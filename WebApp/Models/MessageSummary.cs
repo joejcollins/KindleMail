@@ -5,9 +5,10 @@ using System.Web;
 
 namespace WebApp.Models
 {
-    public class Message
+    public class MessageSummary
     {
         public string Title { get; set; }
         public string From { get; set; }
+        public Boolean Read { get; set; }
     }
 }

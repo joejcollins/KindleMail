@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using MailKit;
 using MailKit.Net.Imap;
 using WebApp.Models;
+using MessageSummary = WebApp.Models.MessageSummary;
 
 namespace WebApp.Controllers
 {
@@ -22,7 +23,6 @@ namespace WebApp.Controllers
                 // Note: since we don't have an OAuth2 token, disable
                 // the XOAUTH2 authentication mechanism.
                 // client.AuthenticationMechanisms.Remove("XOAUTH2");
-                //var password = Environment.GetEnvironmentVariable("PASSWORD");
                 var email = ConfigurationManager.AppSettings["EMAIL"];
                 var password = ConfigurationManager.AppSettings["PASSWORD"];
                 client.Authenticate(email, password);
@@ -33,15 +33,19 @@ namespace WebApp.Controllers
 
                 viewModel.Total = inbox.Count;
 
-                //Console.WriteLine("Total messages: {0}", inbox.Count);
-                //Console.WriteLine("Recent messages: {0}", inbox.Recent);
-
-                //for (int i = 0; i < inbox.Count; i++)
-                //{
-                //    var message = inbox.GetMessage(i);
-                //    Console.WriteLine("Subject: {0}", message.Subject);
-                //}
-
+                var messageSummaries = new List<MessageSummary>();
+                for (var i = 0; i < inbox.Count; i++)
+                {
+                    var message = inbox.GetMessage(i);
+                    var messageSummary = new Models.MessageSummary()
+                    {
+                        Title = message.Subject,
+                        From = message.From[0].Name
+                    };
+                    messageSummaries.Add(messageSummary);
+                }
+                messageSummaries.Reverse(); // Most recent first.
+                viewModel.MessageSummaries = messageSummaries;
                 client.Disconnect(true);
             }
 

@@ -8,11 +8,11 @@
         body {
             color: black;
             background: white;
-           font-weight: bold;
-            font-size: 200%;
+            font-size: 150%;
             font-family: Arial, Helvetica, sans-serif;
         }
 
+        /* Navigation */
         ul {
             list-style-type: none;
             margin: 0;
@@ -23,7 +23,29 @@
             display: inline;
         }
 
+        /* Email list table */
+        table {
+            width: 100%;
+            border: 1px solid #000;
+        }
+        td {
+            border: 1px solid #000;
+        }
 
+        .container {
+            position: relative;
+        }
+        .content {
+            position: absolute;
+            max-width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .spacer {
+            height: 0;
+                overflow: hidden;
+        }
     </style>
 </head>
 <body>
@@ -33,13 +55,6 @@
     </ul>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Lieutenant Green</p>
-        </footer>
     </div>
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
 </body>
 </html>
