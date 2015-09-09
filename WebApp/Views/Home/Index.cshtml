@@ -16,22 +16,24 @@
     <tbody>
         @foreach (var messageSummary in Model.MessageSummaries)
         {
-        <tr class="@(messageSummary.Read ? "seen": "not-seen" )"> 
-            <td>
-                <div class="container">
-                    <div class="content">@messageSummary.From</div>
-                    <div class="spacer">@messageSummary.From</div>
-                    <span>&nbsp;</span>
-                </div>
-            </td>
-            <td>
-                <div class="container">
-                    <div class="content">@messageSummary.Title</div>
-                    <div class="spacer">@messageSummary.Title</div>
-                    <span>&nbsp;</span>
-                </div>
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <div class="container">
+                        <div class="content">@messageSummary.From</div>
+                        <div class="spacer">@messageSummary.From</div>
+                        <span>&nbsp;</span>
+                    </div>
+                </td>
+                <td class="@(messageSummary.Read ? "seen": "not-seen" )">
+                    <a href="#">
+                        <div class="container">
+                            <div class="content">@messageSummary.Title</div>
+                            <div class="spacer">@messageSummary.Title</div>
+                            <span>&nbsp;</span>
+                        </div>
+                    </a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
