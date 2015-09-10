@@ -22,6 +22,12 @@
             display: inline;
         }
 
+        /* Controls */
+        .text-box {
+            font-size: 100%;
+            width: 90%;
+        }
+
         /* Email list table */
         table {
             width: 100%;
@@ -57,8 +63,8 @@
 </head>
 <body>
     <ul>
-        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-        <li>@Html.ActionLink("About", "About", "Home")</li>
+        <li>@Html.ActionLink("Sign In", "SignIn", "Home")</li>
+        <li>@Html.ActionLink("Messages", "MessageList", "Home")</li>
     </ul>
     <div class="container body-content">
         @RenderBody()

@@ -13,16 +13,43 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        
+        public ActionResult SignIn(User user)
+        {
+            ViewBag.Message = "Sign In.";
+            if (ModelState.IsValid)
+            {
+                // Stash the email address in a cookie for the users conven
+                var cookie = new HttpCookie("Email")
+                {
+                    Value = user.Email,
+                    Expires = DateTime.Now.AddYears(10)
+                };
+                Response.Cookies.Add(cookie);
+                // Stash both email and the password in the session
+                Session.Add("User", user);
+                // Show me the messages for the user.
+                return this.MessageList();
+            }
+            else
+            {
+                // If the cookie isn't null populate the email field
+                var emailCookie = Request.Cookies["email"];
+                if (emailCookie != null) user.Email = emailCookie.Value;
+                return View(user);
+            }
+        }
+
+        private ActionResult MessageList()
         {
             var viewModel = new MessageListSummary();
             using (var client = new ImapClient())
             {
                 client.Connect("imap.gmail.com", 993, true);
 
-                var email = ConfigurationManager.AppSettings["EMAIL"];
-                var password = ConfigurationManager.AppSettings["PASSWORD"];
-                client.Login(email, password);
+               // var password = ConfigurationManager.AppSettings["PASSWORD"];
+                var user = (Models.User)Session["User"];
+                client.Login(user.Email, user.Password);
                 client.Behavior.MessageFetchMode = MessageFetchMode.Tiny;
                 client.Behavior.AutoPopulateFolderMessages = true; 
 
@@ -47,19 +74,19 @@ namespace WebApp.Controllers
                 client.Disconnect();
             }
 
-            return View(viewModel);
+            return View("MessageList", viewModel);
         }
 
-        public ActionResult About()
+        public ActionResult MessageRead()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "Read.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult MessageWrite()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Write.";
 
             return View();
         }
