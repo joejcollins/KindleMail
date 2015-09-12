@@ -45,6 +45,7 @@ td {
 
 .container {
     position: relative;
+    display: block;
 }
 
 .content {
@@ -53,6 +54,10 @@ td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+a .content {
+    text-decoration: underline;
 }
 
 .spacer {

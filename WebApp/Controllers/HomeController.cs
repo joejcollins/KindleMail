@@ -13,10 +13,21 @@ namespace WebApp.Controllers
 {
     public class HomeController : Controller
     {
-        
+        public ActionResult SignIn()
+        {
+            ViewBag.Message = "Sign In";
+            var user = new User();
+            // If the cookie isn't null populate the email field
+            var emailCookie = Request.Cookies["email"];
+            if (emailCookie != null) user.Email = emailCookie.Value;
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult SignIn(User user)
         {
-            ViewBag.Message = "Sign In.";
+            
             if (ModelState.IsValid)
             {
                 // Stash the email address in a cookie for the users conven
@@ -33,10 +44,7 @@ namespace WebApp.Controllers
             }
             else
             {
-                // If the cookie isn't null populate the email field
-                var emailCookie = Request.Cookies["email"];
-                if (emailCookie != null) user.Email = emailCookie.Value;
-                return View(user);
+                return this.SignIn();
             }
         }
 
