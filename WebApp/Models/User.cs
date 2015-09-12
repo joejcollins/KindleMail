@@ -8,9 +8,9 @@ namespace WebApp.Models
 {
     public class User
     {
-        [Required(ErrorMessage = "Please enter an email address")]
+        [Required(ErrorMessage = "Please enter your email address")]
         public string Email { get; set; }
-        [Required(ErrorMessage = "Please enter a password")]
+        [Required(ErrorMessage = "Please enter your password")]
         public string Password { get; set; }
     }
 }

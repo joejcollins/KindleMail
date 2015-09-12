@@ -13,9 +13,10 @@
         function keypressHandler(e) {
             if (e.which == 13) {
                 e.preventDefault(); //stops default action: submitting form
-                $(this).blur();
-                alert("go2");
-                $('#submit').focus().click();//give your submit an ID
+                event.target.blur();
+                var submitButton = document.getElementById("submit");
+                submitButton.focus();
+                submitButton.click();
             }
         }
 
@@ -33,14 +34,18 @@
         </div>
         <div>
             @Html.TextBoxFor(model => model.Email, new { id = "email" })
-            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <div>
+            @Html.ValidationMessageFor(model => model.Email) &nbsp;
         </div>
         <div>
             @Html.LabelFor(model => model.Password)
         </div>
         <div>
             @Html.TextBoxFor(model => model.Password, new { id = "password" })
-            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+        <div>
+            @Html.ValidationMessageFor(model => model.Password) &nbsp;
         </div>
         <p>
             <input type="submit" value="Sign In" id="submit" />

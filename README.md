@@ -6,6 +6,7 @@
 
 External/Remote device attach to IIS Express
 
+* Give your development platform a static IP.  For convenience you might want to do this using address reservation on the router.
 
 * Add binding to IISExpress Config (applicationhost.config)
 

@@ -1,6 +1,4 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
     color: black;
     background: white;
     font-size: 200%;
@@ -21,8 +19,14 @@ li {
 /* Controls */
 input {
     font-size: 100%;
-    width: 90%;
-    max-width: 350px;
+    width: 100%;
+    min-width: 430px;
+    max-width: 500px;
+}
+
+fieldset{
+    border: solid 2px black;
+    max-width: 500px;
 }
 
 /* Email list table */
