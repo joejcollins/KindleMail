@@ -7,7 +7,7 @@ _*.ps1
 *.sublime-workspace
 *.exe
 Tests/Casper/*.png
-webAppSettings.config
+WebAppSettings.config
 
 #################
 ## User-specific files
