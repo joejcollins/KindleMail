@@ -83,7 +83,7 @@ namespace WebApp.Controllers
                 // Retrieve reference to a previously created container.
                 var container = blobClient.GetContainerReference("inbox");
                 // Retrieve reference to a blob named "myblob".
-                var blockBlob = container.GetBlockBlobReference("shit");
+                var blockBlob = container.GetBlockBlobReference(user.Email);
 
                 using (var memory = new MemoryStream())
                 // Create or overwrite the "myblob" blob with contents from a local file.
