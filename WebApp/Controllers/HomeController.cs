@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using System.Web.Mvc;
 using ImapX;
 using ImapX.Enums;
+using Microsoft.WindowsAzure;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
+using Microsoft.WindowsAzure.Storage.Blob;
 using WebApp.Models;
-using MessageSummary = WebApp.Models.MessageSummary;
 
 namespace WebApp.Controllers
 {
@@ -54,8 +59,6 @@ namespace WebApp.Controllers
             using (var client = new ImapClient())
             {
                 client.Connect("imap.gmail.com", 993, true);
-
-               // var password = ConfigurationManager.AppSettings["PASSWORD"];
                 var user = (Models.User)Session["User"];
                 client.Login(user.Email, user.Password);
                 client.Behavior.MessageFetchMode = MessageFetchMode.Tiny;
@@ -73,9 +76,28 @@ namespace WebApp.Controllers
                         break;
                 }
 
+                // Retrieve storage account from connection string.
+                var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+                // Create the blob client.
+                var blobClient = storageAccount.CreateCloudBlobClient();
+                // Retrieve reference to a previously created container.
+                var container = blobClient.GetContainerReference("mycontainer");
+                // Retrieve reference to a blob named "myblob".
+                var blockBlob = container.GetBlockBlobReference(user.Email);
+
+                using (var memory = new MemoryStream())
+                // Create or overwrite the "myblob" blob with contents from a local file.
+                using (var writer = new StreamWriter(memory))
+                {
+                    writer.Write(folder);
+                    writer.Flush();
+                    memory.Seek(0, SeekOrigin.Begin);
+                    blockBlob.UploadFromStream(memory);
+                }
+
                 viewModel.Total = folder.Messages.Count();
 
-                var messageSummaries = new List<MessageSummary>();
+                var messageSummaries = new List<Models.MessageSummary>();
                 for (var i = 0; i < viewModel.Total; i++)
                 {
                     var message = folder.Messages[i];
