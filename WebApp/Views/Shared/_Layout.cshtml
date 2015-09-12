@@ -9,8 +9,8 @@
 <body>
     <ul>
         <li>@Html.ActionLink("Create", "MessageWrite", "Home")</li>
-        <li>@Html.ActionLink("Inbox", "MessageList", "Home")</li>
-        <li>@Html.ActionLink("Sent", "MessageList", "Home")</li>
+        <li>@Html.ActionLink("Inbox", "MessageList", "Home", new {type = "Inbox"}, null)</li>
+        <li>@Html.ActionLink("Sent", "MessageList", "Home", new {type = "Sent"}, null)</li>
     </ul>
     <div class="container">
         @RenderBody()

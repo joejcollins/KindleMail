@@ -15,7 +15,6 @@ namespace WebApp.Controllers
     {
         public ActionResult SignIn()
         {
-            ViewBag.Message = "Sign In";
             var user = new User();
             // If the cookie isn't null populate the email field
             var emailCookie = Request.Cookies["email"];
@@ -27,7 +26,6 @@ namespace WebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignIn(User user)
         {
-            
             if (ModelState.IsValid)
             {
                 // Stash the email address in a cookie for the users conven
@@ -40,15 +38,17 @@ namespace WebApp.Controllers
                 // Stash both email and the password in the session
                 Session.Add("User", user);
                 // Show me the messages for the user.
-                return this.MessageList();
+                return RedirectToAction("MessageList", "Home", new { type = "Inbox" });
             }
             else
             {
+                ViewBag.Message = " - Oops";
                 return this.SignIn();
             }
         }
 
-        private ActionResult MessageList()
+        [HttpGet]
+        public ActionResult MessageList(String type)
         {
             var viewModel = new MessageListSummary();
             using (var client = new ImapClient())
@@ -62,13 +62,23 @@ namespace WebApp.Controllers
                 client.Behavior.AutoPopulateFolderMessages = true; 
 
                 // The Inbox folder is always available on all IMAP servers...
-                var inbox = client.Folders.Inbox;
-                viewModel.Total = inbox.Messages.Count();
+                Folder folder = client.Folders.Inbox;
+                switch (type)
+                {
+                    case "Inbox":
+                        folder = client.Folders.Inbox;
+                        break;
+                    case "Sent":
+                        folder = client.Folders.Sent;
+                        break;
+                }
+
+                viewModel.Total = folder.Messages.Count();
 
                 var messageSummaries = new List<MessageSummary>();
                 for (var i = 0; i < viewModel.Total; i++)
                 {
-                    var message = inbox.Messages[i];
+                    var message = folder.Messages[i];
                     var messageSummary = new Models.MessageSummary()
                     {
                         Title = message.Subject,
@@ -81,7 +91,7 @@ namespace WebApp.Controllers
                 viewModel.MessageSummaries = messageSummaries;
                 client.Disconnect();
             }
-
+            ViewBag.Message = " - " + type;
             return View("MessageList", viewModel);
         }
 
