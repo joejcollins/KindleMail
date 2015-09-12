@@ -1,24 +1,65 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    color: black;
+    background: white;
+    font-size: 200%;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Set padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+/* Navigation */
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
-.dl-horizontal dt {
-    white-space: normal;
+li {
+    display: inline;
 }
 
-/* Set width on the form input elements since they're 100% wide by default */
-input,
-select,
-textarea {
-    max-width: 280px;
+/* Controls */
+input {
+    font-size: 100%;
+    width: 90%;
+    max-width: 350px;
+}
+
+/* Email list table */
+table {
+    width: 100%;
+    border: 1px solid #000;
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    border: 1px solid #000;
+}
+
+.container {
+    position: relative;
+}
+
+.content {
+    position: absolute;
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.spacer {
+    height: 0;
+    overflow: hidden;
+}
+
+.seen {
+    background: lightgray;
+}
+
+.not-seen {
+    /* do nothing */
 }

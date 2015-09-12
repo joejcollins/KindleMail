@@ -4,70 +4,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Mail</title>
-    <style type="text/css">
-        body {
-            color: black;
-            background: white;
-            font-size: 200%;
-            font-family: Arial, Helvetica, sans-serif;
-        }
-
-        /* Navigation */
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-        }
-        li {
-            display: inline;
-        }
-
-        /* Controls */
-        .text-box {
-            font-size: 100%;
-            width: 90%;
-        }
-
-        /* Email list table */
-        table {
-            width: 100%;
-            border: 1px solid #000;
-        }
-        th {
-            text-align: left;
-        }
-        td {
-            border: 1px solid #000;
-        }
-        .container {
-            position: relative;
-        }
-        .content {
-            position: absolute;
-            max-width: 100%;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .spacer {
-            height: 0;
-            overflow: hidden;
-        }
-        .seen {
-            background: lightgray;
-        }
-        .not-seen {
-            /* do nothing */
-        }
-    </style>
+    @Styles.Render("~/Content/css")
 </head>
 <body>
     <ul>
         <li>@Html.ActionLink("Sign In", "SignIn", "Home")</li>
         <li>@Html.ActionLink("Messages", "MessageList", "Home")</li>
     </ul>
-    <div class="container body-content">
+    <div class="container">
         @RenderBody()
     </div>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

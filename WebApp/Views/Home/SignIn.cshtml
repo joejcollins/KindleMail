@@ -2,8 +2,28 @@
     ViewBag.Title = "Sign In";
 }
 @model WebApp.Models.User
+@section Scripts
+{
+    <script>
+        
+        function setFocusToTextBox() {
+            document.getElementById("password").focus();
+        }
 
-@using (Html.BeginForm("SignIn", "Home", FormMethod.Post))
+        function keypressHandler(e) {
+            if (e.which == 13) {
+                e.preventDefault(); //stops default action: submitting form
+                $(this).blur();
+                alert("go2");
+                $('#submit').focus().click();//give your submit an ID
+            }
+        }
+
+        setFocusToTextBox();
+    </script>
+}
+
+@using (Html.BeginForm("SignIn", "Home", FormMethod.Post, new { onkeypress = "keypressHandler(event);" }))
 {
     @Html.AntiForgeryToken()
     <fieldset>
@@ -12,18 +32,18 @@
             @Html.LabelFor(model => model.Email)
         </div>
         <div>
-            @Html.TextBoxFor(model => model.Email, new { Class = "text-box" })
+            @Html.TextBoxFor(model => model.Email, new { id = "email" })
             @Html.ValidationMessageFor(model => model.Email)
         </div>
         <div>
             @Html.LabelFor(model => model.Password)
         </div>
         <div>
-            @Html.TextBoxFor(model => model.Password, new { Class = "text-box" })
+            @Html.TextBoxFor(model => model.Password, new { id = "password" })
             @Html.ValidationMessageFor(model => model.Password)
         </div>
         <p>
-            <input type="submit" value="Sign In" />
+            <input type="submit" value="Sign In" id="submit" />
         </p>
     </fieldset>
 }
