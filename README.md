@@ -11,9 +11,9 @@ External/Remote device attach to IIS Express
 * Add binding to IISExpress Config (applicationhost.config).  Since we are using Visual Studio 2015, this is in C:\<Path\To\Solution>\.vs\config\applicationhost.config
 
 <pre>
-    <bindings>
-		<binding protocol="http" bindingInformation="*:56328:192.168.0.3" />
-	</bindings>
+    &lt;bindings&gt;
+		&lt;binding protocol="http" bindingInformation="*:56328:192.168.0.3" /&gt;
+	&lt;/bindings&gt;
 </pre>
  
 * On the command line tell http.sys that it’s ok to talk to this url
