@@ -1,6 +1,6 @@
 # Low Vision Web Mail Client #
 
-
+* Uses ImapX (http://www.imapx.org/)
 
 ## Set Up Remote Client for Development ##
 
@@ -8,9 +8,13 @@ External/Remote device attach to IIS Express
 
 * Give your development platform a static IP.  For convenience you might want to do this using address reservation on the router.
 
-* Add binding to IISExpress Config (applicationhost.config)
+* Add binding to IISExpress Config (applicationhost.config).  Since we are using Visual Studio 2015, this is in C:\<Path\To\Solution>\.vs\config\applicationhost.config
 
-<binding protocol="http" bindingInformation="*:56328:192.168.0.3" />
+<pre>
+    <bindings>
+		<binding protocol="http" bindingInformation="*:56328:192.168.0.3" />
+	</bindings>
+</pre>
  
 * On the command line tell http.sys that it’s ok to talk to this url
 
