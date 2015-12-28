@@ -8,6 +8,7 @@ _*.ps1
 *.exe
 Tests/Casper/*.png
 WebAppSettings.config
+.vs
 
 #################
 ## User-specific files

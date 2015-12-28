@@ -7,7 +7,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Web;
 using System.Web.Mvc;
 using ImapX;
+using ImapX.Constants;
 using ImapX.Enums;
+using ImapX.Exceptions;
+using ImapX.Parsing;
 using Microsoft.WindowsAzure;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
@@ -62,7 +65,7 @@ namespace WebApp.Controllers
                 var user = (Models.User)Session["User"];
                 client.Login(user.Email, user.Password);
                 client.Behavior.MessageFetchMode = MessageFetchMode.Tiny;
-                client.Behavior.AutoPopulateFolderMessages = true; 
+                client.Behavior.AutoPopulateFolderMessages = false; 
 
                 // The Inbox folder is always available on all IMAP servers...
                 Folder folder = client.Folders.Inbox;
@@ -75,32 +78,32 @@ namespace WebApp.Controllers
                         folder = client.Folders.Sent;
                         break;
                 }
+                var messages = folder.Search("ALL", MessageFetchMode.Tiny, 20).OrderByDescending(m => m.Date);
 
-                // Retrieve storage account from connection string.
-                var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
-                // Create the blob client.
-                var blobClient = storageAccount.CreateCloudBlobClient();
-                // Retrieve reference to a previously created container.
-                var container = blobClient.GetContainerReference("inbox");
-                // Retrieve reference to a blob named "myblob".
-                var blockBlob = container.GetBlockBlobReference(user.Email);
+                //// Retrieve storage account from connection string.
+                //var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
+                //// Create the blob client.
+                //var blobClient = storageAccount.CreateCloudBlobClient();
+                //// Retrieve reference to a previously created container.
+                //var container = blobClient.GetContainerReference("inbox");
+                //// Retrieve reference to a blob named "myblob".
+                //var blockBlob = container.GetBlockBlobReference(user.Email);
 
-                using (var memory = new MemoryStream())
-                // Create or overwrite the "myblob" blob with contents from a local file.
-                using (var writer = new StreamWriter(memory))
-                {
-                    writer.Write(folder);
-                    writer.Flush();
-                    memory.Seek(0, SeekOrigin.Begin);
-                    blockBlob.UploadFromStream(memory);
-                }
+                //using (var memory = new MemoryStream())
+                //// Create or overwrite the "myblob" blob with contents from a local file.
+                //using (var writer = new StreamWriter(memory))
+                //{
+                //    writer.Write(folder);
+                //    writer.Flush();
+                //    memory.Seek(0, SeekOrigin.Begin);
+                //    blockBlob.UploadFromStream(memory);
+                //}
 
-                viewModel.Total = folder.Messages.Count();
+                //viewModel.Total = folder.Messages.Count();
 
                 var messageSummaries = new List<Models.MessageSummary>();
-                for (var i = 0; i < viewModel.Total; i++)
+                foreach (var message in messages)
                 {
-                    var message = folder.Messages[i];
                     var messageSummary = new Models.MessageSummary()
                     {
                         Title = message.Subject,
@@ -130,5 +133,34 @@ namespace WebApp.Controllers
 
             return View();
         }
+
+        //public long[] SearchMessageIds(string query = "ALL", int skip = -1, int count = -1)
+        //{
+        //    if (_client.SelectedFolder != this && !Select())
+        //        throw new OperationFailedException("The folder couldn't be selected for search.");
+
+        //    // Examine the folder before searching
+        //    Examine();
+
+        //    if (query.ToUpper() == "ALL" && _client.Behavior.SearchAllNotSupported)
+        //        query = "SINCE 0000-00-00";
+
+        //    IList<string> data = new List<string>();
+        //    if (!_client.SendAndReceive(string.Format(ImapCommands.Search, query), ref data))
+        //        throw new ArgumentException("The search query couldn't be processed");
+
+        //    var result = Expressions.SearchRex.Match(data.FirstOrDefault(Expressions.SearchRex.IsMatch) ?? "");
+
+        //    if (!result.Success)
+        //        //throw new OperationFailedException("The data returned from the server doesn't match the requirements");
+        //        return new long[0];
+
+        //    IEnumerable<long> results = result.Groups[1].Value.Trim().Split(' ').Select(long.Parse).OrderByDescending(_ => _);
+        //    if (skip > 0)
+        //        results = results.Skip(skip);
+        //    if (count > 0)
+        //        results = results.Take(count);
+        //    return results.ToArray();
+        //}
     }
 }
